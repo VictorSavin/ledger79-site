@@ -24,11 +24,11 @@ const stats = [
 ];
 
 const signalCards = [
-  { label: "Entry Zone", value: "3328 – 3334" },
-  { label: "Stop Loss", value: "3317" },
-  { label: "Take Profit 1", value: "3352" },
-  { label: "Take Profit 2", value: "3371" },
-  { label: "Invalidation", value: "Below 3317 close" }
+  { label: "Neutral Zone", value: "Low 4758.92 High 4796.17" },
+  { label: "Cycle 1", value: "High 4758.92 Low 4721.67" },
+  { label: "Buy Setup", value: "Pending" },
+  { label: "Sell Setup", value: "Pending" },
+  { label: "Status", value: "Low Cycle 1" }
 ];
 ---
 
@@ -79,14 +79,22 @@ const signalCards = [
         <section class="hero-grid">
           <div class="hero-card">
             <div class="hero-topline">
-              <span class="live-badge">Updated Sunday 9:15 PM</span>
-              <span class="week-line">Week of 20–24 April 2026</span>
-            </div>
+  <span class="live-badge">Setup status: Awaiting confirmation</span>
+  <span class="week-line">Week of 20–24 April 2026</span>
+
+  <div class="market-meta">
+    <span id="gmt-clock">GMT --:--:--</span>
+    <span id="market-status" class="market-status closed">
+      <span class="market-dot"></span>
+      Market Closed
+    </span>
+  </div>
+</div>
 
             <p class="section-label">Current weekly outlook</p>
             <h1 class="hero-title">
               XAUUSD weekly bias:
-              <span>Bullish</span>
+              <span>Pending</span>
             </h1>
             <p class="hero-copy">
               Looking for continuation above the reaction zone after a clean higher-low structure.
@@ -259,6 +267,58 @@ const signalCards = [
     color: inherit;
     text-decoration: none;
   }
+
+  .market-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#gmt-clock {
+  color: var(--muted);
+  font-size: 0.92rem;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  font-variant-numeric: tabular-nums;
+}
+
+.market-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.market-status.open {
+  color: var(--green);
+  background: rgba(52, 211, 153, 0.14);
+  border-color: rgba(52, 211, 153, 0.22);
+}
+
+.market-status.closed {
+  color: var(--red);
+  background: rgba(251, 113, 133, 0.14);
+  border-color: rgba(251, 113, 133, 0.22);
+}
+
+.market-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
 
   .page-shell {
     position: relative;
@@ -456,18 +516,32 @@ const signalCards = [
   }
 
   .signal-card,
-  .stat-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 16px;
-  }
+.stat-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 18px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  .signal-value {
-    margin-top: 10px;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
+.signal-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  line-height: 1.25;
+  min-height: 34px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.signal-value {
+  margin-top: 14px;
+  font-size: 1rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
 
   .chart-box {
     margin-top: 28px;
@@ -770,3 +844,50 @@ const signalCards = [
     }
   }
 </style>
+<script>
+  function updateClockAndMarketStatus() {
+    const now = new Date();
+
+    const utcHours = now.getUTCHours();
+    const utcMinutes = now.getUTCMinutes();
+    const utcSeconds = now.getUTCSeconds();
+    const utcDay = now.getUTCDay();
+
+    const pad = (num) => String(num).padStart(2, "0");
+
+    const clockEl = document.getElementById("gmt-clock");
+    const statusEl = document.getElementById("market-status");
+
+    if (clockEl) {
+      clockEl.textContent = `GMT ${pad(utcHours)}:${pad(utcMinutes)}:${pad(utcSeconds)}`;
+    }
+
+    let isOpen = false;
+
+    if (utcDay >= 1 && utcDay <= 5) {
+      isOpen = true;
+    } else if (utcDay === 0 && utcHours >= 23) {
+      isOpen = true;
+    } else {
+      isOpen = false;
+    }
+
+    if (statusEl) {
+      statusEl.classList.remove("open", "closed");
+
+      if (isOpen) {
+        statusEl.classList.add("open");
+        statusEl.innerHTML = `<span class="market-dot"></span>Market Open`;
+      } else {
+        statusEl.classList.add("closed");
+        statusEl.innerHTML = `<span class="market-dot"></span>Market Closed`;
+      }
+    }
+  }
+
+  updateClockAndMarketStatus();
+  setInterval(updateClockAndMarketStatus, 1000);
+</script>
+
+</body>
+</html>
