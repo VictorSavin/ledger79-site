@@ -204,14 +204,14 @@ const signalCards = [
             </p>
           </div>
 
-          <div class="risk-card">
-            <div class="mini-label">Risk disclaimer</div>
-            <p>
-              Trading leveraged products involves risk. This website shares market views and setups
-              for educational purposes only and does not guarantee profit or provide personal
-              investment advice.
-            </p>
-          </div>
+          <a href="/risk-disclaimer" class="risk-card risk-link">
+  <div class="mini-label">Risk disclaimer</div>
+  <p>
+    Trading leveraged products involves risk. This website shares market views and setups
+    for educational purposes only and does not guarantee profit or provide personal
+    investment advice.
+  </p>
+</a>
         </section>
       </main>
  
@@ -703,7 +703,18 @@ const signalCards = [
 
   .risk-card {
     background: rgba(10, 18, 31, 0.9);
-  }
+}
+.risk-link {
+  display: block;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.risk-link:hover {
+  transform: translateY(-2px);
+  border-color: rgba(246, 196, 83, 0.28);
+  background: rgba(255, 255, 255, 0.07);
+}
 
   @keyframes marquee {
     0% {
