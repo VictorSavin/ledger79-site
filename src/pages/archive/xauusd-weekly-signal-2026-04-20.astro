@@ -1,0 +1,282 @@
+---
+const pageTitle = "XAUUSD Weekly Signal: 20–24 April 2026 | Ledger79";
+const published = "20 April 2026, 21:15";
+const updated = "20 April 2026, 21:15";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta
+      name="description"
+      content="Weekly XAUUSD bias, entry zone, stop loss, targets, and chart for 20–24 April 2026."
+    />
+  </head>
+
+  <body>
+    <main class="wrap">
+      <a class="back-link" href="/">← Back to homepage</a>
+
+      <section class="page-card">
+        <div class="topline">
+          <div>
+            <p class="eyebrow">Ledger79</p>
+            <h1>XAUUSD Weekly Signal</h1>
+            <p class="week">Week of 20–24 April 2026</p>
+          </div>
+
+          <div class="status-pill">Status: Open</div>
+        </div>
+
+        <div class="time-boxes">
+          <div class="time-card">
+            <div class="time-label">Published</div>
+            <div class="time-value">{published}</div>
+          </div>
+
+          <div class="time-card">
+            <div class="time-label">Last Updated</div>
+            <div class="time-value">{updated}</div>
+          </div>
+        </div>
+
+        <div class="bias-box">
+          <div class="bias-label">Weekly Bias</div>
+          <div class="bias-value">Bullish</div>
+        </div>
+
+        <div class="levels-grid">
+          <div class="level-card">
+            <div class="level-label">Entry Zone</div>
+            <div class="level-value">3328 – 3334</div>
+          </div>
+
+          <div class="level-card">
+            <div class="level-label">Stop Loss</div>
+            <div class="level-value">3317</div>
+          </div>
+
+          <div class="level-card">
+            <div class="level-label">Take Profit 1</div>
+            <div class="level-value">3352</div>
+          </div>
+
+          <div class="level-card">
+            <div class="level-label">Take Profit 2</div>
+            <div class="level-value">3371</div>
+          </div>
+
+          <div class="level-card">
+            <div class="level-label">Invalidation</div>
+            <div class="level-value">Below 3317 close</div>
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <h2>Weekly Chart</h2>
+          <div class="chart-box">Upload your chart image here</div>
+        </div>
+
+        <div class="reason-section">
+          <h2>Why this bias</h2>
+          <ul>
+            <li>Weekly structure remains constructive with higher lows intact.</li>
+            <li>Support held on the reaction zone retest.</li>
+            <li>Momentum favors upside continuation while invalidation holds.</li>
+          </ul>
+        </div>
+
+        <div class="result-box">
+          <h2>Result</h2>
+          <p>Pending — this page was published before the week played out.</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    --bg: #07111f;
+    --panel: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #f8fafc;
+    --muted: rgba(248, 250, 252, 0.72);
+    --dim: rgba(248, 250, 252, 0.45);
+    --gold: #f6c453;
+    --gold-soft: rgba(246, 196, 83, 0.14);
+    --green: #34d399;
+    --shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 24%),
+      linear-gradient(180deg, #08101c 0%, #07111f 100%);
+  }
+
+  .wrap {
+    width: min(980px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 60px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .page-card {
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    padding: 32px;
+  }
+
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 16px;
+  }
+
+  .eyebrow,
+  .time-label,
+  .bias-label,
+  .level-label {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.73rem;
+    color: var(--dim);
+  }
+
+  .eyebrow {
+    color: rgba(246, 196, 83, 0.82);
+    margin: 0 0 10px;
+  }
+
+  h1, h2 {
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+  }
+
+  .week {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .status-pill {
+    background: rgba(52, 211, 153, 0.14);
+    color: var(--green);
+    border: 1px solid rgba(52, 211, 153, 0.22);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .time-boxes,
+  .levels-grid {
+    display: grid;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .time-boxes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .time-card,
+  .level-card,
+  .bias-box,
+  .chart-section,
+  .reason-section,
+  .result-box {
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .time-card,
+  .level-card {
+    padding: 16px;
+  }
+
+  .time-value,
+  .level-value,
+  .bias-value {
+    margin-top: 10px;
+    font-weight: 700;
+  }
+
+  .bias-box,
+  .chart-section,
+  .reason-section,
+  .result-box {
+    margin-top: 24px;
+    padding: 22px;
+  }
+
+  .bias-value {
+    font-size: 2rem;
+    color: var(--gold);
+  }
+
+  .chart-box {
+    margin-top: 14px;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    border: 1px dashed rgba(255,255,255,0.14);
+    display: grid;
+    place-items: center;
+    color: var(--dim);
+    background: rgba(3, 10, 20, 0.58);
+  }
+
+  .reason-section ul {
+    margin: 14px 0 0;
+    padding-left: 20px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .result-box p {
+    margin: 14px 0 0;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .topline,
+    .time-boxes,
+    .levels-grid {
+      grid-template-columns: 1fr;
+      display: grid;
+    }
+
+    .topline {
+      gap: 18px;
+    }
+  }
+</style>

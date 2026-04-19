@@ -1,0 +1,207 @@
+---
+const results = [
+  {
+    week: "20–24 Apr 2026",
+    bias: "Pending",
+    status: "Open",
+    result: "Pending",
+    link: "/archive/xauusd-weekly-signal-2026-04-20"
+  }
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results | Ledger79</title>
+    <meta
+      name="description"
+      content="Weekly XAUUSD results and public performance archive for Ledger79."
+    />
+  </head>
+
+  <body>
+    <main class="wrap">
+      <a class="back-link" href="/">← Back to homepage</a>
+
+      <section class="page-card">
+        <p class="eyebrow">Ledger79</p>
+        <h1>Results</h1>
+        <p class="intro">
+          Every weekly XAUUSD call is kept public. Each result links back to the original page
+          showing the published bias, chart, and timestamp.
+        </p>
+
+        <div class="rules-box">
+          <h2>How results are tracked</h2>
+          <ul>
+            <li><strong>Published</strong> shows when the weekly idea first went live.</li>
+            <li><strong>Last Updated</strong> shows when the result or chart was added later.</li>
+            <li><strong>Open</strong> means the week is still active.</li>
+            <li><strong>Pending</strong> means the week has been published but not yet graded.</li>
+          </ul>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Bias</th>
+                <th>Status</th>
+                <th>Result</th>
+                <th>Record</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.map((item) => (
+                <tr>
+                  <td>{item.week}</td>
+                  <td>{item.bias}</td>
+                  <td>
+                    <span class="pill open">{item.status}</span>
+                  </td>
+                  <td>{item.result}</td>
+                  <td>
+                    <a class="record-link" href={item.link}>View week</a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    --bg: #07111f;
+    --panel: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #f8fafc;
+    --muted: rgba(248, 250, 252, 0.72);
+    --dim: rgba(248, 250, 252, 0.45);
+    --gold: #f6c453;
+    --green: #34d399;
+    --green-soft: rgba(52, 211, 153, 0.14);
+    --shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 24%),
+      linear-gradient(180deg, #08101c 0%, #07111f 100%);
+  }
+
+  .wrap {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 60px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .page-card {
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    padding: 32px;
+  }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.73rem;
+    color: rgba(246, 196, 83, 0.82);
+  }
+
+  h1, h2 { margin: 0; }
+
+  h1 { font-size: 2.6rem; }
+
+  .intro {
+    margin: 16px 0 0;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 760px;
+  }
+
+  .rules-box {
+    margin-top: 24px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 22px;
+  }
+
+  .rules-box ul {
+    margin: 14px 0 0;
+    padding-left: 20px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .table-wrap {
+    margin-top: 24px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-align: left;
+  }
+
+  th {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+  }
+
+  td {
+    color: var(--muted);
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .pill.open {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  .record-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>
