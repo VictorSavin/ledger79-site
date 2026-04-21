@@ -88,13 +88,16 @@ const records = data ?? [];
   * { box-sizing: border-box; }
 
   body {
-    margin: 0;
-    color: var(--text);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background:
-      radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 24%),
-      linear-gradient(180deg, #08101c 0%, #07111f 100%);
-  }
+  margin: 0;
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #07111f;
+  background-image:
+    radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 24%),
+    linear-gradient(180deg, #08101c 0%, #07111f 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%;
+}
 
   .wrap {
     width: min(1100px, calc(100% - 32px));
@@ -135,12 +138,16 @@ const records = data ?? [];
   }
 
   .table-wrap {
-    margin-top: 24px;
-    overflow-x: auto;
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.04);
-  }
+  margin-top: 24px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(246, 196, 83, 0.08), rgba(255,255,255,0.03) 28%, rgba(255,255,255,0.02)),
+    rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
 
   table {
     width: 100%;
