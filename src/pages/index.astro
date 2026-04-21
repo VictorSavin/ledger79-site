@@ -30,17 +30,27 @@ const tickerItems = [
 const { data: weeklyRecords } = await supabase
   .from("weekly_records")
   .select("*")
-  .order("published_at", { ascending: false })
-  .limit(3);
+  .order("published_at", { ascending: false });
 
-const recentResults = weeklyRecords ?? [];
+const allWeeklyRecords = weeklyRecords ?? [];
+const recentResults = allWeeklyRecords.slice(0, 3);
 
 const stats = [
-  { label: "Weeks Posted", value: "1" },
-  { label: "Wins", value: "0" },
-  { label: "Losses", value: "0" },
-  { label: "Invalidated", value: "0" }
+  { label: "Weeks Posted", value: String(allWeeklyRecords.length) },
+  {
+    label: "Wins",
+    value: String(allWeeklyRecords.filter((item) => item.result_status === "Won").length)
+  },
+  {
+    label: "Losses",
+    value: String(allWeeklyRecords.filter((item) => item.result_status === "Lost").length)
+  },
+  {
+    label: "Invalidated",
+    value: String(allWeeklyRecords.filter((item) => item.result_status === "Invalidated").length)
+  }
 ];
+
 
 const signalCards = [
   { label: "Neutral Zone", value: content.neutral_zone ?? "Pending" },
