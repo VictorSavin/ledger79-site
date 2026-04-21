@@ -33,6 +33,8 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
           <h2>Homepage Content</h2>
 
           <div class="field-grid">
+            <input id="headline_bias" placeholder="Headline bias (e.g. Pending / Bullish / Bearish)" />
+            <input id="setup_status_text" placeholder="Setup status text" />
             <input id="neutral_zone" placeholder="Neutral Zone" />
             <input id="cycle_1" placeholder="Cycle 1" />
             <input id="buy_setup" placeholder="Buy Trigger / Setup" />
@@ -142,6 +144,8 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
         }
 
         const fieldIds = [
+          "headline_bias",
+          "setup_status_text",
           "neutral_zone",
           "cycle_1",
           "buy_setup",
@@ -219,6 +223,8 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
         }
 
         const payload = {
+          headline_bias: document.getElementById("headline_bias").value,
+          setup_status_text: document.getElementById("setup_status_text").value,
           neutral_zone: document.getElementById("neutral_zone").value,
           cycle_1: document.getElementById("cycle_1").value,
           buy_setup: document.getElementById("buy_setup").value,
@@ -283,6 +289,8 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
         const payload = {
           slug,
+          headline_bias: currentContent.headline_bias,
+          setup_status_text: currentContent.setup_status_text,
           week_label: weekLabel,
           published_at: new Date().toISOString(),
           bias,

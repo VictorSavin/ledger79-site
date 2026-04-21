@@ -14,6 +14,8 @@ const { data } = await supabase
 
 const content = data ?? {};
 
+
+
 const tickerItems = [
   { symbol: "XAUUSD", price: "3348.20", change: "+0.42%" },
   { symbol: "EURUSD", price: "1.0834", change: "+0.11%" },
@@ -25,11 +27,13 @@ const tickerItems = [
   { symbol: "BTCUSD", price: "84750", change: "+1.12%" }
 ];
 
-const archive = [
-  { week: "20–24 Apr 2026", bias: "Bullish", outcome: "Open", rr: "Pending" },
-  { week: "14–18 Apr 2026", bias: "Bullish", outcome: "Won", rr: "+2.1R" },
-  { week: "07–11 Apr 2026", bias: "Bearish", outcome: "Invalidated", rr: "—" }
-];
+const { data: weeklyRecords } = await supabase
+  .from("weekly_records")
+  .select("*")
+  .order("published_at", { ascending: false })
+  .limit(3);
+
+const recentResults = weeklyRecords ?? [];
 
 const stats = [
   { label: "Weeks Posted", value: "14" },
@@ -94,7 +98,9 @@ const signalCards = [
         <section class="hero-grid">
           <div class="hero-card">
             <div class="hero-topline">
-  <span class="live-badge">Setup status: Awaiting confirmation</span>
+  <span class="live-badge">
+  Setup status: {content.setup_status_text ?? "Awaiting confirmation"}
+</span>
   <span class="week-line">Week of 20–24 April 2026</span>
 
   <div class="market-meta">
@@ -108,9 +114,9 @@ const signalCards = [
 
             <p class="section-label">Current weekly outlook</p>
             <h1 class="hero-title">
-              XAUUSD weekly bias:
-              <span>Pending</span>
-            </h1>
+  XAUUSD weekly bias:
+  <span>{content.headline_bias ?? "Pending"}</span>
+</h1>
             <p class="hero-copy">
               Looking for continuation above the reaction zone after a clean higher-low structure.
               The weekly idea remains valid while price holds above invalidation.
@@ -208,50 +214,46 @@ const signalCards = [
                 ))}
               </div>
             </div>
+            <div id="results-preview" class="glass-card">
+  <div class="section-head side-section-head">
+    <div>
+      <div class="mini-label">Results</div>
+      <h2>Past weekly calls</h2>
+    </div>
+    <a href="/results" class="archive-link">View all results →</a>
+  </div>
+
+  <div class="archive-grid side-archive-grid">
+    {recentResults.length === 0 ? (
+      <article class="archive-card">
+        <div class="archive-week">No weekly records yet</div>
+        <div class="archive-result">Your saved weekly results will appear here.</div>
+      </article>
+    ) : (
+      recentResults.map((item) => (
+        <article class="archive-card">
+          <div class="archive-week">{item.week_label ?? "—"}</div>
+
+          <div class="archive-row">
+            <div>
+              <div class="archive-label">Bias</div>
+              <div class="archive-bias">{item.bias ?? "—"}</div>
+            </div>
+
+          </div>
+
+          <div class="archive-result">
+  Result: {item.result_status ?? "Open"} · Status: {item.status ?? "—"}
+</div>
+          <a href={`/results/${item.slug}`} class="archive-button">Open week</a>
+        </article>
+      ))
+    )}
+  </div>
+</div>
 
             
           </aside>
-        </section>
-
-        <section id="archive" class="archive-section">
-          <div class="section-head">
-            <div>
-              <div class="mini-label">Results</div>
-              <h2>Past weekly calls</h2>
-            </div>
-            <a href="/results" class="archive-link">View all results →</a>
-          </div>
-
-          <div class="archive-grid">
-            {archive.map((item) => (
-              <article class="archive-card">
-                <div class="archive-week">{item.week}</div>
-
-                <div class="archive-row">
-                  <div>
-                    <div class="archive-label">Bias</div>
-                    <div class="archive-bias">{item.bias}</div>
-                  </div>
-
-                  <span
-                    class:list={[
-                      "archive-badge",
-                      item.outcome === "Won"
-                        ? "badge-win"
-                        : item.outcome === "Lost"
-                          ? "badge-loss"
-                          : "badge-neutral"
-                    ]}
-                  >
-                    {item.outcome}
-                  </span>
-                </div>
-
-                <div class="archive-result">Result: {item.rr}</div>
-                <a href="/archive/xauusd-weekly-signal-2026-04-20" class="archive-button">Open week</a>
-              </article>
-            ))}
-          </div>
         </section>
 
         <section class="bottom-grid">
@@ -307,6 +309,33 @@ const signalCards = [
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+.side-section-head {
+  margin-bottom: 18px;
+}
+
+.side-archive-grid {
+  margin-top: 0;
+  grid-template-columns: 1fr;
+}
+
+.side-archive-grid .archive-card {
+  width: 100%;
+  max-width: none;
+}
+
+.side-archive-grid .archive-row {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.side-archive-grid .archive-bias {
+  max-width: 100%;
+  line-height: 1.2;
+}
+#results-preview {
+  padding: 30px;
 }
 
 .plan-box {
@@ -530,7 +559,7 @@ const signalCards = [
 
   .hero-grid {
     display: grid;
-    grid-template-columns: 1.25fr 0.75fr;
+    grid-template-columns: 1.1fr 0.9fr;
     gap: 24px;
     align-items: start;
   }
@@ -762,6 +791,16 @@ const signalCards = [
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
+  #results-preview .archive-grid {
+  margin-top: 0;
+  grid-template-columns: 1fr;
+}
+
+#results-preview .archive-card {
+  width: 100%;
+  max-width: none;
+  padding: 28px;
+}
 
   .archive-card {
     padding: 22px;
@@ -796,6 +835,8 @@ const signalCards = [
     font-weight: 700;
     white-space: nowrap;
   }
+
+  
 
   .badge-win {
     background: var(--green-soft);
