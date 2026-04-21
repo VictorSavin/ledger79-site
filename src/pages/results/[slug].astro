@@ -1,0 +1,328 @@
+---
+export const prerender = false;
+
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  import.meta.env.PUBLIC_SUPABASE_URL,
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+const { slug } = Astro.params;
+
+const { data } = await supabase
+  .from("weekly_records")
+  .select("*")
+  .eq("slug", slug)
+  .maybeSingle();
+
+const record = data;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{record ? `${record.week_label} | Ledger79` : "Weekly Record | Ledger79"}</title>
+    <meta
+      name="description"
+      content="Frozen weekly XAUUSD record with chart, values, and timestamp."
+    />
+  </head>
+
+  <body>
+    <main class="wrap">
+      <a class="back-link" href="/results">← Back to results</a>
+
+      <section class="page-card">
+        {record ? (
+          <>
+            <p class="eyebrow">Ledger79</p>
+            <h1>{record.week_label ?? "Weekly Record"}</h1>
+            <p class="intro">
+              This page is a frozen record of the published weekly setup.
+            </p>
+
+            <div class="top-grid">
+              <div class="info-card">
+                <div class="info-label">Published</div>
+                <div class="info-value">{record.published_at ?? "—"}</div>
+              </div>
+
+              <div class="info-card">
+                <div class="info-label">Bias</div>
+                <div class="info-value">{record.bias ?? "—"}</div>
+              </div>
+
+              <div class="info-card">
+                <div class="info-label">Status</div>
+                <div class="info-value">{record.status ?? "—"}</div>
+              </div>
+
+              <div class="info-card">
+                <div class="info-label">Result</div>
+                <div class="info-value">{record.result_status ?? "—"}</div>
+              </div>
+            </div>
+
+            <div class="levels-grid">
+              <div class="level-card">
+                <div class="level-label">Neutral Zone</div>
+                <div class="level-value">{record.neutral_zone ?? "—"}</div>
+              </div>
+
+              <div class="level-card">
+                <div class="level-label">Cycle 1</div>
+                <div class="level-value">{record.cycle_1 ?? "—"}</div>
+              </div>
+
+              <div class="level-card">
+                <div class="level-label">Buy Trigger</div>
+                <div class="level-value">{record.buy_setup ?? "—"}</div>
+              </div>
+
+              <div class="level-card">
+                <div class="level-label">Sell Trigger</div>
+                <div class="level-value">{record.sell_setup ?? "—"}</div>
+              </div>
+            </div>
+
+            <div class="plans-grid">
+              <div class="plan-box">
+                <div class="plan-title">Buy Plan</div>
+                <div class="plan-row"><span>Entry</span><strong>{record.buy_entry ?? "—"}</strong></div>
+                <div class="plan-row"><span>Stop Loss</span><strong>{record.buy_sl ?? "—"}</strong></div>
+                <div class="plan-row"><span>Take Profit</span><strong>{record.buy_tp ?? "—"}</strong></div>
+              </div>
+
+              <div class="plan-box">
+                <div class="plan-title">Sell Plan</div>
+                <div class="plan-row"><span>Entry</span><strong>{record.sell_entry ?? "—"}</strong></div>
+                <div class="plan-row"><span>Stop Loss</span><strong>{record.sell_sl ?? "—"}</strong></div>
+                <div class="plan-row"><span>Take Profit</span><strong>{record.sell_tp ?? "—"}</strong></div>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h2>Published Chart</h2>
+              {record.chart_image_url ? (
+                <div class="chart-frame">
+                  <img src={record.chart_image_url} alt="Published weekly chart" class="chart-image" />
+                </div>
+              ) : (
+                <p class="muted">No chart image saved.</p>
+              )}
+            </div>
+
+            <div class="text-grid">
+              <div class="text-card">
+                <h2>Operating Strategy</h2>
+                <p>{record.operating_strategy ?? "—"}</p>
+              </div>
+
+              <div class="text-card">
+                <h2>Method</h2>
+                <p>{record.method_text ?? "—"}</p>
+              </div>
+            </div>
+
+            <div class="text-card">
+              <h2>Result Notes</h2>
+              <p>{record.result_notes ?? "No notes added yet."}</p>
+            </div>
+
+            <div class="proof-row">
+              <span class="proof-label">Proof Link</span>
+              {record.proof_url ? (
+                <a href={record.proof_url} target="_blank" rel="noreferrer" class="proof-link">
+                  Open proof
+                </a>
+              ) : (
+                <span class="muted">No proof link added yet.</span>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <p class="eyebrow">Ledger79</p>
+            <h1>Record not found</h1>
+            <p class="intro">This weekly record does not exist.</p>
+          </>
+        )}
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  :root {
+    --panel: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #f8fafc;
+    --muted: rgba(248, 250, 252, 0.72);
+    --dim: rgba(248, 250, 252, 0.45);
+    --gold: #f6c453;
+    --shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 24%),
+      linear-gradient(180deg, #08101c 0%, #07111f 100%);
+  }
+
+  .wrap {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 60px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .page-card {
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    padding: 32px;
+  }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.73rem;
+    color: rgba(246, 196, 83, 0.82);
+  }
+
+  h1, h2 { margin: 0; }
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 1.2rem; }
+
+  .intro, .muted {
+    margin-top: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .top-grid,
+  .levels-grid,
+  .plans-grid,
+  .text-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .top-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .plans-grid,
+  .text-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .info-card,
+  .level-card,
+  .plan-box,
+  .chart-card,
+  .text-card {
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: rgba(255,255,255,0.04);
+    padding: 20px;
+  }
+
+  .info-label,
+  .level-label,
+  .proof-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--dim);
+  }
+
+  .info-value,
+  .level-value {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .plan-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .plan-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .plan-row:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .chart-frame {
+    margin-top: 16px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #08101c;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .chart-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .text-card p {
+    margin: 14px 0 0;
+    color: var(--muted);
+    line-height: 1.85;
+  }
+
+  .proof-row {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .proof-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .top-grid,
+    .levels-grid,
+    .plans-grid,
+    .text-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

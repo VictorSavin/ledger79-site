@@ -1,4 +1,19 @@
 ---
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  import.meta.env.PUBLIC_SUPABASE_URL,
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+const { data } = await supabase
+  .from("site_content")
+  .select("*")
+  .eq("id", 1)
+  .maybeSingle();
+
+const content = data ?? {};
+
 const tickerItems = [
   { symbol: "XAUUSD", price: "3348.20", change: "+0.42%" },
   { symbol: "EURUSD", price: "1.0834", change: "+0.11%" },
@@ -24,11 +39,11 @@ const stats = [
 ];
 
 const signalCards = [
-  { label: "Neutral Zone", value: "372.5 pts" },
-  { label: "Cycle 1", value: "Low cycle" },
-  { label: "Buy Setup", value: "4800.00" },
-  { label: "Sell Setup", value: "4711.18" },
-  { label: "Status", value: "Gap risk" }
+  { label: "Neutral Zone", value: content.neutral_zone ?? "Pending" },
+  { label: "Cycle 1", value: content.cycle_1 ?? "Pending" },
+  { label: "Buy Trigger", value: content.buy_setup ?? "Pending" },
+  { label: "Sell Trigger", value: content.sell_setup ?? "Pending" },
+  { label: "Status", value: content.status ?? "Pending" }
 ];
 ---
 
@@ -115,17 +130,17 @@ const signalCards = [
 
     <div class="plan-row">
       <span class="plan-label">Entry</span>
-      <span class="plan-value">4800.00</span>
+      <span class="plan-value">{content.buy_entry ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
       <span class="plan-label">Stop Loss</span>
-      <span class="plan-value">Pending</span>
+      <span class="plan-value">{content.buy_sl ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
       <span class="plan-label">Take Profit</span>
-      <span class="plan-value">Pending</span>
+      <span class="plan-value">{content.buy_tp ?? "Pending"}</span>
     </div>
   </div>
 
@@ -134,17 +149,17 @@ const signalCards = [
 
     <div class="plan-row">
       <span class="plan-label">Entry</span>
-      <span class="plan-value">4711.18</span>
+      <span class="plan-value">{content.sell_entry ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
       <span class="plan-label">Stop Loss</span>
-      <span class="plan-value">4800.90</span>
+      <span class="plan-value">{content.sell_sl ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
       <span class="plan-label">Take Profit</span>
-      <span class="plan-value">4596.47</span>
+      <span class="plan-value">{content.sell_tp ?? "Pending"}</span>
     </div>
   </div>
 </div>
@@ -156,7 +171,11 @@ const signalCards = [
   </div>
 
   <div class="chart-placeholder">
-  <img src="/images/XAUUSD_2026-04-20.png" alt="Current XAUUSD chart setup" class="chart-image" />
+  <img
+  src={content.chart_image_url ?? "/images/XAUUSD_2026-04-20.png"}
+  alt="Current XAUUSD chart setup"
+  class="chart-image"
+/>
 </div>
 
   
@@ -165,13 +184,17 @@ const signalCards = [
 
           <aside class="side-stack">
             <div class="glass-card">
-              <div class="mini-label">Why this bias</div>
-              <ul class="bullet-list">
-                <li>Weekly structure remains constructive with higher lows intact.</li>
-                <li>Support held cleanly on the reaction area retest.</li>
-                <li>Momentum favors upside continuation into resistance sweep.</li>
-                <li>Bias is cancelled if price closes below the invalidation area.</li>
-              </ul>
+              <div class="mini-label">Operating strategy</div>
+              <p class="method-copy">
+  {content.operating_strategy ?? "No operating strategy added yet."}
+</p>
+            </div>
+
+            <div id="method" class="glass-card">
+              <div class="mini-label">Method</div>
+              <p class="method-copy">
+  {content.method_text ?? "No method text added yet."}
+</p>
             </div>
 
             <div id="results" class="glass-card">
@@ -186,14 +209,7 @@ const signalCards = [
               </div>
             </div>
 
-            <div id="method" class="glass-card">
-              <div class="mini-label">Method</div>
-              <p class="method-copy">
-                Weekly bias is built from structure, support and resistance, and confirmation around
-                the key reaction zone. Every weekly idea stays archived publicly with the original
-                setup and the final result at week end.
-              </p>
-            </div>
+            
           </aside>
         </section>
 

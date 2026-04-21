@@ -1,0 +1,533 @@
+---
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Ledger79</title>
+  </head>
+
+  <body>
+    <main class="wrap">
+      <section class="page-card">
+        <p class="eyebrow">Ledger79</p>
+        <h1>Admin</h1>
+        <p class="intro">
+          Use this page to update the live homepage content and freeze weekly records.
+        </p>
+
+        <div id="login-box" class="panel">
+          <h2>Login</h2>
+          <div class="field-grid">
+            <input id="email" type="email" placeholder="Email" />
+            <input id="password" type="password" placeholder="Password" />
+          </div>
+          <button id="login-btn" class="primary-btn" type="button">Login</button>
+          <p id="login-message" class="message"></p>
+        </div>
+
+        <div id="admin-box" class="panel" style="display:none;">
+          <h2>Homepage Content</h2>
+
+          <div class="field-grid">
+            <input id="neutral_zone" placeholder="Neutral Zone" />
+            <input id="cycle_1" placeholder="Cycle 1" />
+            <input id="buy_setup" placeholder="Buy Trigger / Setup" />
+            <input id="sell_setup" placeholder="Sell Trigger / Setup" />
+            <input id="status" placeholder="Status" />
+          </div>
+
+          <h3>Buy Plan</h3>
+          <div class="field-grid">
+            <input id="buy_entry" placeholder="Buy Entry" />
+            <input id="buy_sl" placeholder="Buy Stop Loss" />
+            <input id="buy_tp" placeholder="Buy Take Profit" />
+          </div>
+
+          <h3>Sell Plan</h3>
+          <div class="field-grid">
+            <input id="sell_entry" placeholder="Sell Entry" />
+            <input id="sell_sl" placeholder="Sell Stop Loss" />
+            <input id="sell_tp" placeholder="Sell Take Profit" />
+          </div>
+
+          <h3>Text</h3>
+          <div class="textarea-grid">
+            <textarea id="operating_strategy" placeholder="Operating strategy"></textarea>
+            <textarea id="method_text" placeholder="Method"></textarea>
+          </div>
+
+          <h3>Chart Image</h3>
+          <input id="chart_image" type="file" accept="image/*" />
+          <p id="image-current" class="helper"></p>
+
+          <h3>Freeze Weekly Record</h3>
+          <div class="field-grid">
+            <input id="week_label" placeholder="Week label (e.g. 20–24 Apr 2026)" />
+            <input id="bias" placeholder="Bias (e.g. Bullish / Bearish / Sell confirmed)" />
+            <input id="result_status" placeholder="Result status (e.g. Open / Won / Lost / Pending)" />
+          </div>
+
+          <div class="field-grid two-col">
+            <input id="result_notes" placeholder="Result notes" />
+            <input id="proof_url" placeholder="Proof URL (optional)" />
+          </div>
+
+          <div class="button-row">
+  <button id="freeze-btn" class="secondary-btn" type="button">Save Weekly Record</button>
+  <button id="mark-win-btn" class="secondary-btn" type="button">Mark Win</button>
+  <button id="mark-loss-btn" class="secondary-btn" type="button">Mark Loss</button>
+  <button id="save-btn" class="primary-btn" type="button">Publish Homepage</button>
+  <button id="logout-btn" class="secondary-btn" type="button">Logout</button>
+</div>
+
+          <p id="freeze-message" class="message"></p>
+          <p id="save-message" class="message"></p>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" define:vars={{ supabaseUrl, supabaseAnonKey }}>
+      import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+      const loginBox = document.getElementById("login-box");
+      const adminBox = document.getElementById("admin-box");
+      const loginBtn = document.getElementById("login-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const saveBtn = document.getElementById("save-btn");
+      const freezeBtn = document.getElementById("freeze-btn");
+      const markWinBtn = document.getElementById("mark-win-btn");
+      const markLossBtn = document.getElementById("mark-loss-btn");
+
+      const loginMessage = document.getElementById("login-message");
+      const saveMessage = document.getElementById("save-message");
+      const freezeMessage = document.getElementById("freeze-message");
+      const imageCurrent = document.getElementById("image-current");
+
+      function showAdmin() {
+        loginBox.style.display = "none";
+        adminBox.style.display = "block";
+      }
+
+      function showLogin() {
+        loginBox.style.display = "block";
+        adminBox.style.display = "none";
+      }
+
+      function slugify(text) {
+        return String(text)
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-");
+      }
+
+      async function loadContent() {
+        const { data, error } = await supabase
+          .from("site_content")
+          .select("*")
+          .eq("id", 1)
+          .maybeSingle();
+
+        if (error) {
+          console.error(error);
+          saveMessage.textContent = error.message;
+          return;
+        }
+
+        const fieldIds = [
+          "neutral_zone",
+          "cycle_1",
+          "buy_setup",
+          "sell_setup",
+          "status",
+          "buy_entry",
+          "buy_sl",
+          "buy_tp",
+          "sell_entry",
+          "sell_sl",
+          "sell_tp",
+          "operating_strategy",
+          "method_text"
+        ];
+
+        fieldIds.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = data?.[id] ?? "";
+        });
+
+        if (data?.chart_image_url) {
+          imageCurrent.textContent = `Current image saved: ${data.chart_image_url}`;
+        } else {
+          imageCurrent.textContent = "No image uploaded yet.";
+        }
+      }
+
+      loginBtn?.addEventListener("click", async () => {
+        loginMessage.textContent = "";
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          loginMessage.textContent = error.message;
+          return;
+        }
+
+        showAdmin();
+        await loadContent();
+      });
+
+      logoutBtn?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        showLogin();
+      });
+
+      saveBtn?.addEventListener("click", async () => {
+        saveMessage.textContent = "Publishing...";
+
+        let chartImageUrl = "";
+
+        const fileInput = document.getElementById("chart_image");
+        const file = fileInput.files?.[0];
+
+        if (file) {
+          const filePath = `current/${Date.now()}-${file.name}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from("charts")
+            .upload(filePath, file, { upsert: true });
+
+          if (uploadError) {
+            saveMessage.textContent = uploadError.message;
+            return;
+          }
+
+          const { data: publicUrlData } = supabase.storage
+            .from("charts")
+            .getPublicUrl(filePath);
+
+          chartImageUrl = publicUrlData.publicUrl;
+        }
+
+        const payload = {
+          neutral_zone: document.getElementById("neutral_zone").value,
+          cycle_1: document.getElementById("cycle_1").value,
+          buy_setup: document.getElementById("buy_setup").value,
+          sell_setup: document.getElementById("sell_setup").value,
+          status: document.getElementById("status").value,
+          buy_entry: document.getElementById("buy_entry").value,
+          buy_sl: document.getElementById("buy_sl").value,
+          buy_tp: document.getElementById("buy_tp").value,
+          sell_entry: document.getElementById("sell_entry").value,
+          sell_sl: document.getElementById("sell_sl").value,
+          sell_tp: document.getElementById("sell_tp").value,
+          operating_strategy: document.getElementById("operating_strategy").value,
+          method_text: document.getElementById("method_text").value,
+          updated_at: new Date().toISOString()
+        };
+
+        if (chartImageUrl) {
+          payload.chart_image_url = chartImageUrl;
+        }
+
+        const { data, error } = await supabase
+          .from("site_content")
+          .update(payload)
+          .eq("id", 1)
+          .select();
+
+        if (error) {
+          saveMessage.textContent = `Save failed: ${error.message}`;
+          return;
+        }
+
+        saveMessage.textContent = `Published successfully. Rows updated: ${data?.length ?? 0}`;
+        await loadContent();
+      });
+
+      freezeBtn?.addEventListener("click", async () => {
+        freezeMessage.textContent = "Saving weekly record...";
+
+        const weekLabel = document.getElementById("week_label").value.trim();
+        const bias = document.getElementById("bias").value.trim();
+        const resultStatus = document.getElementById("result_status").value.trim();
+        const resultNotes = document.getElementById("result_notes").value.trim();
+        const proofUrl = document.getElementById("proof_url").value.trim();
+
+        if (!weekLabel) {
+          freezeMessage.textContent = "Please enter a week label.";
+          return;
+        }
+
+        const slug = slugify(weekLabel);
+
+        const { data: currentContent, error: currentError } = await supabase
+          .from("site_content")
+          .select("*")
+          .eq("id", 1)
+          .maybeSingle();
+
+        if (currentError || !currentContent) {
+          freezeMessage.textContent = `Freeze failed: could not load current content.`;
+          return;
+        }
+
+        const payload = {
+          slug,
+          week_label: weekLabel,
+          published_at: new Date().toISOString(),
+          bias,
+          neutral_zone: currentContent.neutral_zone,
+          cycle_1: currentContent.cycle_1,
+          buy_setup: currentContent.buy_setup,
+          sell_setup: currentContent.sell_setup,
+          status: currentContent.status,
+          buy_entry: currentContent.buy_entry,
+          buy_sl: currentContent.buy_sl,
+          buy_tp: currentContent.buy_tp,
+          sell_entry: currentContent.sell_entry,
+          sell_sl: currentContent.sell_sl,
+          sell_tp: currentContent.sell_tp,
+          operating_strategy: currentContent.operating_strategy,
+          method_text: currentContent.method_text,
+          chart_image_url: currentContent.chart_image_url,
+          result_status: resultStatus,
+          result_notes: resultNotes,
+          proof_url: proofUrl
+        };
+
+        const { data, error } = await supabase
+          .from("weekly_records")
+          .insert(payload)
+          .select();
+
+        if (error) {
+          freezeMessage.textContent = `Freeze failed: ${error.message}`;
+          return;
+        }
+
+        freezeMessage.textContent = `Weekly record saved: /results/${slug}`;
+      });
+
+      async function updateResultStatus(newStatus) {
+  freezeMessage.textContent = `Updating result to ${newStatus}...`;
+
+  const weekLabel = document.getElementById("week_label").value.trim();
+
+  if (!weekLabel) {
+    freezeMessage.textContent = "Please enter the same week label used when saving the record.";
+    return;
+  }
+
+  const slug = slugify(weekLabel);
+
+  const { data, error } = await supabase
+    .from("weekly_records")
+    .update({
+      result_status: newStatus,
+      result_notes: document.getElementById("result_notes").value.trim(),
+      proof_url: document.getElementById("proof_url").value.trim()
+    })
+    .eq("slug", slug)
+    .select();
+
+  if (error) {
+    freezeMessage.textContent = `Update failed: ${error.message}`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    freezeMessage.textContent = "No matching record found for that week label.";
+    return;
+  }
+
+  freezeMessage.textContent = `Result updated: ${newStatus}`;
+}
+
+markWinBtn?.addEventListener("click", async () => {
+  await updateResultStatus("Won");
+});
+
+markLossBtn?.addEventListener("click", async () => {
+  await updateResultStatus("Lost");
+});
+
+      const { data: sessionData } = await supabase.auth.getSession();
+
+      if (sessionData.session) {
+        showAdmin();
+        await loadContent();
+      } else {
+        showLogin();
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  :root {
+    --bg: #07111f;
+    --panel: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #f8fafc;
+    --muted: rgba(248, 250, 252, 0.72);
+    --gold: #f6c453;
+    --shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(246, 196, 83, 0.16), transparent 24%),
+      linear-gradient(180deg, #08101c 0%, #07111f 100%);
+  }
+
+  .wrap {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 60px;
+  }
+
+  .page-card {
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    padding: 32px;
+  }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.73rem;
+    color: rgba(246, 196, 83, 0.82);
+  }
+
+  h1, h2, h3 {
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: var(--gold);
+  }
+
+  .intro {
+    margin: 16px 0 0;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .panel {
+    margin-top: 24px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 24px;
+  }
+
+  .field-grid,
+  .textarea-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .field-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .field-grid.two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .textarea-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(7, 17, 31, 0.8);
+    color: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font: inherit;
+  }
+
+  textarea {
+    min-height: 180px;
+    resize: vertical;
+  }
+
+  .button-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 18px;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .primary-btn {
+    background: rgba(246, 196, 83, 0.14);
+    color: var(--gold);
+  }
+
+  .secondary-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+  }
+
+  .message,
+  .helper {
+    color: var(--muted);
+    margin-top: 14px;
+    line-height: 1.7;
+    word-break: break-word;
+  }
+
+  @media (max-width: 900px) {
+    .field-grid,
+    .field-grid.two-col,
+    .textarea-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      flex-direction: column;
+    }
+  }
+</style>
