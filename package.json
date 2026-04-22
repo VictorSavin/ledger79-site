@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.4",
     "@supabase/supabase-js": "^2.104.0",
     "astro": "^6.1.8"
