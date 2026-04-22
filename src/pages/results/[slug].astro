@@ -28,6 +28,37 @@ const record = data;
       name="description"
       content="Frozen weekly XAUUSD record with chart, values, and timestamp."
     />
+
+    <link rel="icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#07111f" />
+
+<meta property="og:type" content="article" />
+<meta
+  property="og:title"
+  content={record ? `${record.week_label} XAUUSD Record | Ledger79` : "Weekly Record | Ledger79"}
+/>
+<meta
+  property="og:description"
+  content={record
+    ? `Frozen XAUUSD weekly record for ${record.week_label} with published chart, setup values, timestamp, and result.`
+    : "Frozen XAUUSD weekly record with published chart, setup values, timestamp, and result."}
+/>
+<meta property="og:url" content={`https://ledger79.com/results/${slug}`} />
+<meta property="og:image" content={record?.chart_image_url ?? "https://ledger79.com/og-image.jpg"} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta
+  name="twitter:title"
+  content={record ? `${record.week_label} XAUUSD Record | Ledger79` : "Weekly Record | Ledger79"}
+/>
+<meta
+  name="twitter:description"
+  content={record
+    ? `Frozen XAUUSD weekly record for ${record.week_label} with published chart, setup values, timestamp, and result.`
+    : "Frozen XAUUSD weekly record with published chart, setup values, timestamp, and result."}
+/>
+<meta name="twitter:image" content={record?.chart_image_url ?? "https://ledger79.com/og-image.jpg"} />
   </head>
 
   <body>
