@@ -6,5 +6,9 @@ export default defineConfig({
   site: "https://ledger79.com",
   output: "server",
   adapter: vercel(),
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => page !== "https://ledger79.com/admin/",
+    }),
+  ],
 });
