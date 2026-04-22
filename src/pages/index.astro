@@ -55,8 +55,8 @@ const stats = [
 const signalCards = [
   { label: "Neutral Zone", value: content.neutral_zone ?? "Pending" },
   { label: "Cycle 1", value: content.cycle_1 ?? "Pending" },
-  { label: "Buy Trigger", value: content.buy_setup ?? "Pending" },
-  { label: "Sell Trigger", value: content.sell_setup ?? "Pending" },
+  { label: "Bullish Scenario", value: content.buy_setup ?? "Pending" },
+  { label: "Bearish Scenario", value: content.sell_setup ?? "Pending" },
   { label: "Status", value: content.status ?? "Pending" }
 ];
 ---
@@ -65,29 +65,29 @@ const signalCards = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>XAUUSD Weekly Bias | Ledger79</title>
+    <title>Weekly XAUUSD Market Journal | Ledger79</title>
     <meta
       name="description"
-      content="Weekly XAUUSD bias, entry zone, stop loss, targets, and public performance archive."
+      content="Personal weekly XAUUSD market journal with scenarios, key levels, and a public archive of past views."
     />
     <link rel="icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="theme-color" content="#07111f" />
 
 <meta property="og:type" content="website" />
-<meta property="og:title" content="XAUUSD Weekly Bias | Ledger79" />
+<meta property="og:title" content="Weekly XAUUSD Market Journal | Ledger79" />
 <meta
   property="og:description"
-  content="XAUUSD journal publishing weekly gold market bias, confirmed setups, and a public record of past weekly calls."
+  content="Personal XAUUSD journal sharing weekly market views, key levels, and a public archive of past weeks."
 />
 <meta property="og:url" content="https://ledger79.com/" />
 <meta property="og:image" content="https://ledger79.com/og-image.jpg" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="XAUUSD Weekly Bias | Ledger79" />
+<meta name="twitter:title" content="Weekly XAUUSD Market Journal | Ledger79" />
 <meta
   name="twitter:description"
-  content="XAUUSD journal publishing weekly gold market bias, confirmed setups, and a public record of past weekly calls."
+  content="Personal XAUUSD journal sharing weekly market views, key levels, and a public archive of past weeks."
 />
 <meta name="twitter:image" content="https://ledger79.com/og-image.jpg" />
 
@@ -141,9 +141,9 @@ const signalCards = [
   </div>
 </div>
 
-            <p class="section-label">Current weekly outlook</p>
+            <p class="section-label">Current weekly market view</p>
             <h1 class="hero-title">
-  My XAUUSD bias:
+  My Weekly XAUUSD Market View:
   <span>{content.headline_bias ?? "Pending"}</span>
 </h1>
             <p class="hero-copy">
@@ -160,39 +160,39 @@ const signalCards = [
             </div>
 <div class="plans-grid">
   <div class="plan-box">
-    <div class="plan-title">Buy Plan</div>
+    <div class="plan-title">Bullish Scenario</div>
 
     <div class="plan-row">
-      <span class="plan-label">Entry</span>
+      <span class="plan-label">Reference Level</span>
       <span class="plan-value">{content.buy_entry ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
-      <span class="plan-label">Stop Loss</span>
+      <span class="plan-label">Invalidation Level</span>
       <span class="plan-value">{content.buy_sl ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
-      <span class="plan-label">Take Profit</span>
+      <span class="plan-label">Target Zone</span>
       <span class="plan-value">{content.buy_tp ?? "Pending"}</span>
     </div>
   </div>
 
   <div class="plan-box">
-    <div class="plan-title">Sell Plan</div>
+    <div class="plan-title">Bearish Scenario</div>
 
     <div class="plan-row">
-      <span class="plan-label">Entry</span>
+      <span class="plan-label">Reference Level</span>
       <span class="plan-value">{content.sell_entry ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
-      <span class="plan-label">Stop Loss</span>
+      <span class="plan-label">Invalidation Level</span>
       <span class="plan-value">{content.sell_sl ?? "Pending"}</span>
     </div>
 
     <div class="plan-row">
-      <span class="plan-label">Take Profit</span>
+      <span class="plan-label">Target Zone</span>
       <span class="plan-value">{content.sell_tp ?? "Pending"}</span>
     </div>
   </div>
@@ -246,7 +246,7 @@ const signalCards = [
   <div class="section-head side-section-head">
     <div>
       <div class="mini-label">Results</div>
-      <h2>Past weekly calls</h2>
+      <h2>Past weekly journal entries</h2>
     </div>
     <a href="/results" class="archive-link">View all results →</a>
   </div>
@@ -255,7 +255,7 @@ const signalCards = [
     {recentResults.length === 0 ? (
       <article class="archive-card">
         <div class="archive-week">No weekly records yet</div>
-        <div class="archive-result">Your saved weekly results will appear here.</div>
+        <div class="archive-result">Your saved weekly journal records will appear here.</div>
       </article>
     ) : (
       recentResults.map((item) => (
