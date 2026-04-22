@@ -57,10 +57,11 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
           </div>
 
           <h3>Text</h3>
-          <div class="textarea-grid">
-            <textarea id="operating_strategy" placeholder="Operating strategy"></textarea>
-            <textarea id="method_text" placeholder="Method"></textarea>
-          </div>
+<div class="textarea-grid">
+  <textarea id="hero_copy" placeholder="Homepage summary text"></textarea>
+  <textarea id="operating_strategy" placeholder="Operating strategy"></textarea>
+  <textarea id="method_text" placeholder="Method"></textarea>
+</div>
 
           <h3>Chart Image</h3>
           <input id="chart_image" type="file" accept="image/*" />
@@ -146,6 +147,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
         const fieldIds = [
           "headline_bias",
           "setup_status_text",
+          "hero_copy",
           "neutral_zone",
           "cycle_1",
           "buy_setup",
@@ -225,6 +227,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
         const payload = {
           headline_bias: document.getElementById("headline_bias").value,
           setup_status_text: document.getElementById("setup_status_text").value,
+          hero_copy: document.getElementById("hero_copy").value,
           neutral_zone: document.getElementById("neutral_zone").value,
           cycle_1: document.getElementById("cycle_1").value,
           buy_setup: document.getElementById("buy_setup").value,
@@ -291,6 +294,7 @@ const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
           slug,
           headline_bias: currentContent.headline_bias,
           setup_status_text: currentContent.setup_status_text,
+          hero_copy: currentContent.hero_copy,
           week_label: weekLabel,
           published_at: new Date().toISOString(),
           bias,

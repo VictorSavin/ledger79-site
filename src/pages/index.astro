@@ -126,9 +126,8 @@ const signalCards = [
   <span>{content.headline_bias ?? "Pending"}</span>
 </h1>
             <p class="hero-copy">
-              Looking for continuation above the reaction zone after a clean higher-low structure.
-              The weekly idea remains valid while price holds above invalidation.
-            </p>
+  {content.hero_copy ?? "No weekly summary added yet."}
+</p>
 
             <div id="current" class="signal-grid">
               {signalCards.map((card) => (
